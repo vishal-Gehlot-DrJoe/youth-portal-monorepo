@@ -9,8 +9,8 @@
     "build:client:dev": "vite build client --mode development",
     "build:client:prod": "vite build client --mode production",
     "build:server": "tsc -p api/tsconfig.build.json",
-    "build:dev": "yarn build:client:dev && ts-node scripts/copy-ui-build.ts && yarn build:server",
-    "build:prod": "yarn build:client:prod && ts-node scripts/copy-ui-build.ts && yarn build:server",
+    "build:dev": "yarn build:client:dev && ts-node scripts/copy-ui-build.js && yarn build:server",
+    "build:prod": "yarn build:client:prod && ts-node scripts/copy-ui-build.js && yarn build:server",
     "start": "node api/dist/server.js"
   },
   "dependencies": {
