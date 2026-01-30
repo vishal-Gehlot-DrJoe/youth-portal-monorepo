@@ -6,6 +6,8 @@
     "dev": "kill-port 5001 5173 && concurrently \"yarn dev:client\" \"yarn dev:api\"",
     "dev:client": "vite client --mode development --port 5173",
     "dev:api": "nodemon",
+    "build:client:dev": "vite build client --mode development",
+    "build:client:prod": "vite build client --mode production",
     "build:server": "tsc -p api/tsconfig.build.json",
     "start": "node api/dist/server.js"
   },
