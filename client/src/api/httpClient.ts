@@ -2,12 +2,12 @@ import axios, { AxiosError, AxiosInstance, InternalAxiosRequestConfig } from 'ax
 import { ApiResponse, ApiException } from '../types/api';
 import { getToken } from '../auth/tokenStorage';
 import { auth } from '../auth/firebase.auth';
+import { env } from '../config/env';
 
-const BASE_URL = '/api';
 const TIMEOUT = 30000;
 
 const httpClient: AxiosInstance = axios.create({
-    baseURL: BASE_URL,
+    baseURL: env.API_BASE_URL,
     timeout: TIMEOUT,
     headers: {
         'Content-Type': 'application/json',
