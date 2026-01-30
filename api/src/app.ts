@@ -18,7 +18,7 @@ app.use('/api/layouts', layoutsRouter);
 app.use('/api/media', mediaRouter);
 app.use('/api/youth-emails', youthEmailRouter);
 
-const publicPath = path.join(__dirname, 'public');
+const publicPath = path.join(__dirname, '..', 'public');
 app.use(express.static(publicPath));
 
 app.get('*', (req: Request, res: Response) => {
