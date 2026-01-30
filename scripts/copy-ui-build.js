@@ -23,8 +23,8 @@ async function copyBuild() {
         await fs.ensureDir(path.resolve(root, 'api/dist'));
         await fs.copy(source, destination);
         console.log('✓ UI build successfully copied to api/dist/public');
-    } catch (err: unknown) {
-        const error = err as Error;
+    } catch (err) {
+        const error = err;
         console.error('✗ Error copying build:', error.message);
         process.exit(1);
     }
