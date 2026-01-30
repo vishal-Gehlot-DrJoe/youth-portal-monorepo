@@ -1,0 +1,11 @@
+{
+    "watch": [
+        "api"
+    ],
+    "ext": "ts,json",
+    "ignore": [
+        "api/dist/**"
+    ],
+    "delay": 1000,
+    "exec": "ts-node --project api/tsconfig.json api/server.ts"
+}

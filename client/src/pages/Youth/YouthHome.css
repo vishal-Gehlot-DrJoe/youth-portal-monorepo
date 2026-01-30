@@ -1,0 +1,87 @@
+.youth-home {
+  padding: 32px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.youth-home__loading,
+.youth-home__empty {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  gap: 16px;
+}
+
+.youth-home__header {
+  text-align: center;
+  margin-bottom: 40px;
+}
+
+.youth-home__header h2 {
+  margin-bottom: 8px;
+  color: #1e3a5f;
+}
+
+.youth-home__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 24px;
+}
+
+/* Tile Styles */
+.youth-tile {
+  border-radius: 16px;
+  overflow: hidden;
+  background: white;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+}
+
+.youth-tile:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.12);
+}
+
+.youth-tile--full_width {
+  grid-column: 1 / -1;
+}
+
+.youth-tile--small {
+  max-width: 300px;
+}
+
+.youth-tile__image {
+  height: 200px;
+  background-size: cover;
+  background-position: center;
+}
+
+.youth-tile--full_width .youth-tile__image {
+  height: 250px;
+}
+
+.youth-tile--small .youth-tile__image {
+  height: 150px;
+}
+
+.youth-tile__content {
+  padding: 20px;
+}
+
+.youth-tile__title {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+  font-weight: 600;
+  color: #1e3a5f;
+}
+
+.youth-tile__link {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  color: #1890ff;
+  font-size: 14px;
+  font-weight: 500;
+}
