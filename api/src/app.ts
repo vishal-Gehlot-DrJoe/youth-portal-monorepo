@@ -1,4 +1,5 @@
 import express, { Request, Response } from 'express';
+import cors from 'cors';
 import path from 'path';
 import healthRouter from './routes/health';
 import authRouter from './routes/auth';
@@ -9,6 +10,7 @@ import youthEmailRouter from './routes/youth-email';
 import { errorHandler } from './middlewares';
 
 const app = express();
+app.use(cors());
 app.use(express.json());
 
 app.use('/api/health', healthRouter);
