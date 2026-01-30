@@ -6,11 +6,7 @@
     "dev": "kill-port 5001 5173 && concurrently \"yarn dev:client\" \"yarn dev:api\"",
     "dev:client": "vite client --mode development --port 5173",
     "dev:api": "nodemon",
-    "build:client:dev": "vite build client --mode development",
-    "build:client:prod": "vite build client --mode production",
     "build:server": "tsc -p api/tsconfig.build.json",
-    "build:dev": "yarn build:client:dev && ts-node scripts/copy-ui-build.js && yarn build:server",
-    "build:prod": "yarn build:client:prod && ts-node scripts/copy-ui-build.js && yarn build:server",
     "start": "node api/dist/server.js"
   },
   "dependencies": {
@@ -52,6 +48,5 @@
     "ts-node": "^10.9.1",
     "typescript": "^5.2.2",
     "vite": "^4.5.0"
-  },
-  "packageManager": "yarn@1.22.22+sha512.a6b2f7906b721bba3d67d4aff083df04dad64c399707841b7acf00f6b133b7ac24255f2652fa22ae3534329dc6180534e98d17432037ff6fd140556e2bb3137e"
+  }
 }
