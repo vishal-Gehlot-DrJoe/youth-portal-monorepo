@@ -24,6 +24,17 @@ const AdminHome: React.FC = () => {
     const [sidebarCollapsed, setSidebarCollapsed] = useState(true);
 
     const [tileToEdit, setTileToEdit] = useState<Tile | null>(null);
+    const [previewMode, setPreviewMode] = useState(false);
+
+    useEffect(() => {
+        const handleKeyDown = (e: KeyboardEvent) => {
+            if (e.key === 'Escape' && previewMode) {
+                setPreviewMode(false);
+            }
+        };
+        window.addEventListener('keydown', handleKeyDown);
+        return () => window.removeEventListener('keydown', handleKeyDown);
+    }, [previewMode]);
 
     const { data: draftTiles = [], isLoading: draftsLoading, isFetching: draftsFetching } = useTiles('DRAFT');
     const { data: activeTiles = [], isLoading: activeLoading, isFetching: activeFetching } = useTiles('ACTIVE');
@@ -143,13 +154,13 @@ const AdminHome: React.FC = () => {
 
     return (
         <App>
-            <div className="flex flex-col h-screen ">
+            <div className={`flex flex-col h-screen ${previewMode ? 'fixed inset-0 z-[100] bg-background' : ''}`}>
                 <div className="flex flex-1 overflow-hidden relative pt-4 md:pt-0">
                     <div className={`
                         shrink-0 border-r border-gray-200 bg-white flex flex-col z-[70] transition-all duration-300
-                        ${sidebarCollapsed ? 'w-0 border-r-0' : 'fixed inset-y-0 left-0 w-72 md:relative md:w-72'}
+                        ${(sidebarCollapsed || previewMode) ? 'w-0 border-r-0' : 'fixed inset-y-0 left-0 w-72 md:relative md:w-72'}
                     `}>
-                        {!sidebarCollapsed && (
+                        {!sidebarCollapsed && !previewMode && (
                             showingSkeleton ? (
                                 <div className="flex-1 flex flex-col animate-pulse">
                                     <div className="p-4 border-b border-gray-200 flex justify-between items-center bg-background">
@@ -199,19 +210,21 @@ const AdminHome: React.FC = () => {
                             )
                         )}
                     </div>
-                    <button
-                        onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
-                        className={`
-                            absolute left-0 top-1/2 -translate-y-1/2 z-[80]
-                            bg-white border border-gray-200 rounded-r-lg shadow-md
-                            w-6 h-16 flex items-center justify-center
-                            text-charcoal/40 hover:text-primary hover:border-primary
-                            transition-all duration-300
-                            ${sidebarCollapsed ? 'translate-x-0' : 'translate-x-72'}
-                        `}
-                    >
-                        {sidebarCollapsed ? <RightOutlined className="text-xs" /> : <LeftOutlined className="text-xs" />}
-                    </button>
+                    {!previewMode && (
+                        <button
+                            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+                            className={`
+                                absolute left-0 top-1/2 -translate-y-1/2 z-[80]
+                                bg-white border border-gray-200 rounded-r-lg shadow-md
+                                w-6 h-16 flex items-center justify-center
+                                text-charcoal/40 hover:text-primary hover:border-primary
+                                transition-all duration-300
+                                ${sidebarCollapsed ? 'translate-x-0' : 'translate-x-72'}
+                            `}
+                        >
+                            {sidebarCollapsed ? <RightOutlined className="text-xs" /> : <LeftOutlined className="text-xs" />}
+                        </button>
+                    )}
 
                     <div className="flex-1 bg-background overflow-y-auto p-4 md:p-8">
                         {showingSkeleton ? (
@@ -249,10 +262,25 @@ const AdminHome: React.FC = () => {
                             <div className="max-w-6xl mx-auto pt-16 md:pt-0">
                                 <div className="mb-6 flex justify-between items-end">
                                     <div>
-                                        <Title level={3} className="!mb-1 !text-charcoal text-2xl md:text-3xl">Youth portal</Title>
+                                        <div className="flex items-center gap-3">
+                                            <Title level={3} className="!mb-0 !text-charcoal text-2xl md:text-3xl">Youth portal</Title>
+                                            <Badge
+                                                status={previewMode ? "processing" : "default"}
+                                                text={previewMode ? "Preview Mode" : "Edit Mode"}
+                                                className="bg-gray-100 px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                            />
+                                        </div>
                                     </div>
-                                    <div className="text-right text-charcoal/40 text-[10px] md:text-sm">
-                                        {layoutTiles.length} Tiles
+                                    <div className="flex items-center gap-4">
+                                        <Button
+                                            onClick={() => setPreviewMode(!previewMode)}
+                                            className={`${previewMode ? 'bg-charcoal text-white hover:!text-white' : ''}`}
+                                        >
+                                            {previewMode ? 'Back to Editor' : 'Preview Live'}
+                                        </Button>
+                                        <div className="text-right text-charcoal/40 text-[10px] md:text-sm">
+                                            {layoutTiles.length} Tiles
+                                        </div>
                                     </div>
                                 </div>
 
@@ -267,19 +295,19 @@ const AdminHome: React.FC = () => {
                                     ) : (
                                         <div className="space-y-6">
                                             <div className={`grid gap-3 md:gap-4 ${keepGrid
-                                                    ? 'grid-cols-4 auto-rows-[160px] xs:auto-rows-[200px] md:auto-rows-[250px]'
-                                                    : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[250px]'
+                                                ? 'grid-cols-4 auto-rows-[160px] xs:auto-rows-[200px] md:auto-rows-[250px]'
+                                                : 'grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 auto-rows-[250px]'
                                                 }`}>
                                                 {layoutTiles.map((tile, index) => {
                                                     const spanClass = keepGrid ? {
-                                                        'SMALL': 'col-span-1 row-span-1',      
-                                                        'LARGE': 'col-span-2 row-span-2',      
-                                                        'FULL_WIDTH': 'col-span-4 row-span-1', 
+                                                        'SMALL': 'col-span-1 row-span-1',
+                                                        'LARGE': 'col-span-2 row-span-2',
+                                                        'FULL_WIDTH': 'col-span-4 row-span-1',
                                                     }[tile.size] || 'col-span-2 row-span-2' : {
                                                         'SMALL': 'col-span-1 row-span-1',
                                                         'LARGE': 'col-span-1 sm:col-span-2 row-span-2',
                                                         'FULL_WIDTH': 'col-span-1 sm:col-span-2 lg:col-span-4 row-span-1',
-                                                    }[tile.size] || 'col-span-1 sm:col-span-2 row-span-2'; 
+                                                    }[tile.size] || 'col-span-1 sm:col-span-2 row-span-2';
 
                                                     return (
                                                         <LayoutTile
@@ -290,22 +318,25 @@ const AdminHome: React.FC = () => {
                                                             onRemove={() => handleRemoveTile(index)}
                                                             onEdit={() => handleEditTile(tile)}
                                                             className={`h-full ${spanClass}`}
+                                                            isPreview={previewMode}
                                                         />
                                                     );
                                                 })}
                                             </div>
-                                            <div
-                                                onClick={handleAddTile}
-                                                className="
-                                                    h-20 border-2 border-dashed border-gray-300 rounded-xl 
-                                                    flex items-center justify-center gap-2
-                                                    text-charcoal/40 hover:text-primary hover:border-primary hover:bg-primary/5
-                                                    cursor-pointer transition-all duration-200 group
-                                                "
-                                            >
-                                                <PlusOutlined className="text-xl group-hover:scale-110 transition-transform" />
-                                                <span className="font-medium">Add Tile to Layout</span>
-                                            </div>
+                                            {!previewMode && (
+                                                <div
+                                                    onClick={handleAddTile}
+                                                    className="
+                                                        h-20 border-2 border-dashed border-gray-300 rounded-xl 
+                                                        flex items-center justify-center gap-2
+                                                        text-charcoal/40 hover:text-primary hover:border-primary hover:bg-primary/5
+                                                        cursor-pointer transition-all duration-200 group
+                                                    "
+                                                >
+                                                    <PlusOutlined className="text-xl group-hover:scale-110 transition-transform" />
+                                                    <span className="font-medium">Add Tile to Layout</span>
+                                                </div>
+                                            )}
                                         </div>
                                     )}
                                 </div>
@@ -313,7 +344,7 @@ const AdminHome: React.FC = () => {
                         )}
                     </div>
                 </div>
-                {!showingSkeleton && (
+                {!showingSkeleton && !previewMode && (
                     <div className="fixed bottom-20 right-4 md:right-8 z-[60] flex flex-col items-end gap-2 pointer-events-none">
                         <div className="flex gap-2 flex-col pointer-events-auto">
                             <Button
