@@ -15,7 +15,7 @@ interface LayoutTileProps {
 
 const LayoutTile: React.FC<LayoutTileProps> = ({ tile, index, onReplace, onRemove, onEdit, className, isPreview }) => {
     const handleClick = () => {
-        if (isPreview && tile.linkUrl) {
+        if (tile.linkUrl) {
             window.open(tile.linkUrl, '_blank');
         }
     };
