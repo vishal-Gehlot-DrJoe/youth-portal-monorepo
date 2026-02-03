@@ -114,9 +114,23 @@ const CreateTileModal: React.FC<CreateTileModalProps> = ({ open, onClose, tileTo
         }
         if (!size) return;
 
-        let finalLinkUrl = linkUrl;
-        if (finalLinkUrl && !/^https?:\/\//i.test(finalLinkUrl)) {
+        let finalLinkUrl = linkUrl.trim();
+        if (!finalLinkUrl) {
+            setError('Please enter a link URL');
+            return;
+        }
+
+        // Add protocol if missing
+        if (!/^https?:\/\//i.test(finalLinkUrl)) {
             finalLinkUrl = `https://${finalLinkUrl}`;
+        }
+
+        // Validate URL format
+        try {
+            new URL(finalLinkUrl);
+        } catch (e) {
+            setError('Please enter a valid URL (e.g., google.com)');
+            return;
         }
 
         const payload = {
@@ -301,7 +315,7 @@ const CreateTileModal: React.FC<CreateTileModalProps> = ({ open, onClose, tileTo
                             </div>
 
                             <div>
-                                <label className="block text-sm font-semibold text-charcoal mb-1">Link URL (Optional)</label>
+                                <label className="block text-sm font-semibold text-charcoal mb-1">Link URL <span className="text-red-500">*</span></label>
                                 <div className="relative">
                                     <LinkOutlined className="absolute left-3 top-3 text-charcoal/40" />
                                     <input
