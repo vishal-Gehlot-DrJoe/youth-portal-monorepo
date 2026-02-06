@@ -41,18 +41,6 @@ const YouthTile: React.FC<YouthTileProps> = ({ tile, className }) => {
                 <div className="absolute inset-0 bg-gradient-to-t from-black/90 via-black/30 to-transparent opacity-100 group-hover:opacity-90 transition-opacity" />
             </div>
 
-            <div className="absolute inset-0 p-6 flex flex-col justify-end">
-                <h3 className="text-white font-bold text-lg sm:text-xl md:text-2xl leading-tight drop-shadow-lg line-clamp-3 transition-all">
-                    {tile.title}
-                </h3>
-                {tile.linkUrl && (
-                    <div className="mt-2 h-0 group-hover:h-6 overflow-hidden transition-all duration-300 opacity-0 group-hover:opacity-100">
-                        <span className="text-white/70 text-xs uppercase tracking-widest font-bold flex items-center gap-1">
-                            Explore Now →
-                        </span>
-                    </div>
-                )}
-            </div>
         </div>
     );
 };
