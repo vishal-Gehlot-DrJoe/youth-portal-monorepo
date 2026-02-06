@@ -116,8 +116,6 @@ const YouthDashboard: React.FC = () => {
                     ) : (
                         <div className="space-y-8">
                             <div className="animate-fade-in">
-                                <Title level={2} className="!mb-1 !text-charcoal !font-serif">Hello, {user?.displayName?.split(' ')[0] || 'Member'}</Title>
-                                <Text type="secondary" className="text-base italic">Explore your resources and latest updates.</Text>
                             </div>
 
                             <div className={`grid gap-4 md:gap-6 ${keepGrid
